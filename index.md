@@ -115,6 +115,33 @@ Notes: For learning a new codebase, make safe operations as you mold the codebas
 
 ## Examples
 
+
+---
+
+# Functional Programming
+
+...
+
+## What is functional programming?
+
+- not what you were taught
+- not a set of instructions
+- expressions over statements
+- all state is localized
+
+...
+
+## Benefits
+
+- Stateless
+  - no side effects
+  - no interactions except at input/output
+- Focus on what machines do best
+  - perform an operation over a (possibly unlimited) number of inputs
+- Generalizable abstraction
+  - Simple concepts are more scalable
+  - Map/reduce forms foundation of Hadoop
+
 ---
 
 1. Functional Programming
