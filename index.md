@@ -321,24 +321,65 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 
 ---
 
-1. Zero-defect Software
-    1. Levels of rigor
-        1. Mathematically-provable code
-            1. brute-force all possible inputs
-        1. Verifiably correct code
-        1. Code written for verifiability
-    1. Only the most simple code is mathematically provable; only simple code is verifable.
-        1. Compose more complex functionality from verifiably-correct components.
-        1. Limit the surface of the components.
-        1. OO programming can help here to encapsulate state
-    1. Use refactoring and functional programming principles to simplify the code safely
-    1. Avoid if statements or other branching logic (number of states the sub program can be in)
-        1. Think of 'if' statements like gotos. Avoid them - there's probably a better way
-    1. Examples and case studies
-        1. Examine a number of case studies drawn from real-world commits
-1. Conclusion
-    1. What is the common factor of all of this?
-    1. Reducing interactions
-    1. Reduces complexity
-    1. Elegance begets simplicity
-    1. Python is particularly well-suited to adopt functional, OO, or imperative paradigms when appropriate
+# Zero Defect Software
+
+...
+
+## Levels of Rigor
+
+- Mathematically provable
+  - brute force
+  - property-based testing
+- Verifiably correct code
+- Code written for verifiability
+
+## Cleanroom Development
+
+- Careful specification of functions, components, and control constructs
+  - clarity
+  - precision
+- Catch many errors before compile/execution time
+- Understand the program thoroughly
+- Rigorous reviews
+
+## Practice
+
+- Only the most simple code is mathematically provable
+- Only simple code is verifiable
+- Limit relevant state, interactions
+- Declare and enforce constraints (inputs, outputs)
+- Use refactoring, functional programming to safely simplify the code
+
+## Expectations
+
+- Slower time to initial release
+  - Faster (or comparable) development lifecycle
+- Low level of defects during testing
+- Few defects in production
+
+Note: A high level of defects during testing indicates failure in the process. Revisit and bolster the review process.
+
+...
+
+## Limiting State
+
+- Avoid if statements and other branching logic (number of states the sub program can be in)
+- 'if' is the new 'goto'
+  - avoid them; there's probably a better way
+
+...
+
+## Examples
+
+---
+
+# Conclusions
+
+All together, these approaches
+
+- Reduce interactions,
+- Reducing complexity.
+- Elegance begets simplicity.
+- Python shines
+  - functional, OO, imperative where appropriate
+  - robust patterns for exception handling
