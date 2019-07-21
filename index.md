@@ -58,10 +58,11 @@ Note: Finally, there are techniques from Zero-Defect software.
 
 - Object-oriented Programming
 - Test/Documentation/Behavior-Driven-Developmpent
+- Static analysis tools
 - Agile (fail fast)
 - Performance
 
-Note: In this talk, I'll be focused on optimizing for correctness of design and disregarding the impact of performance. Often this tradeoff is a good one to make in practice too, as readability matters and premature optimization is a fools errand.
+Note: Static analysis tools (linters, style checkers, IDEs) are a powerful way to avoid common mistakes before even saving a file. In this talk, I'll be focused on optimizing for correctness of design and disregarding the impact of performance. Often this tradeoff is a good one to make in practice too, as readability matters and premature optimization is a fools errand.
 ...
 
 ## Examples
@@ -175,8 +176,11 @@ Note: This syntax is shorter, but that's not it's key benefit. The key benefit i
 - one output parameter
 - few input parameters (ideally one)
 - rely on exceptions for handling exceptional conditions
+- prefer single-word actions
+  - `string.lower(input)` > `string.string_lowercase_input(input)`
+  - `dedent(lstrip(input))` > `dedent_and_lstrip(input)`
 
-Note: Here's where Python really shines - there's (preferably) one outcome from a function (its prime directive). Languages like Go require exceptional conditions to be handled in-band. Java features like ".." require each and every exception to be handled explicitly.
+Note: Here's where Python really shines - there's (preferably) one outcome from a function (its prime directive). Languages like Go require exceptional conditions to be handled in-band. Java features like ".." require each and every exception to be handled explicitly. Many functions can be represented with single word actions. If there are multiple words, especially if the words combine more than a single concern, suggests the function may be doing too much (or unintentionally dragging in the parent scope or parameters).
 
 ...
 
@@ -338,6 +342,7 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 - Careful specification of functions, components, and control constructs
   - clarity
   - precision
+  - completeness
 - Catch many errors before compile/execution time
 - Understand the program thoroughly
 - Rigorous reviews
@@ -349,6 +354,14 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 - Limit relevant state, interactions
 - Declare and enforce constraints (inputs, outputs)
 - Use refactoring, functional programming to safely simplify the code
+
+...
+
+## Legacy code
+
+- Code is the spec
+
+Note: Often with legacy code, there is no specification. The code is the spec. Derive a spec.
 
 ## Expectations
 
@@ -363,13 +376,71 @@ Note: A high level of defects during testing indicates failure in the process. R
 
 ## Limiting State
 
-- Avoid if statements and other branching logic (number of states the sub program can be in)
+- Avoid if statements and other branching logic
 - 'if' is the new 'goto'
   - avoid them; there's probably a better way
+
+Note: Limiting branching logic reduces the number of states the subprogram can be in and thus the number of combinations that need to be considered.
 
 ...
 
 ## Examples
+
+```python
+def main():
+    # ... (no branches)
+    try:
+        open("esdsort.dat", 'w')
+    except Exception:
+        pass
+    # ...
+```
+
+- infer the purpose
+- derive a spec
+- extract a function
+
+...
+
+## Truncate output file
+
+```python
+
+OUTPUT_FILENAME = "esdsort.dat"
+
+
+def truncate(filename):
+    """
+    Unconditionally ensure the named file exists and is truncated.
+    """
+    try:
+        open(filename, 'w')
+    except Exception:
+        pass
+
+
+def main():
+    # ... (no branches)
+    truncate(OUTPUT_FILENAME)
+    # ...
+```
+
+Notes: In this change, I've now made explicit and apparent the purpose of that segment of code. This change also makes more explicit the specification that the output file will be truncated during startup. The code is still the spec, but it reads more like a spec. I've also extracted a variable for the output filename, an operation that probably should be done in a separate commit and affecting all hard-coded usages of that name. Now we can perform a rigorous review of this new truncate behavior. Can you imagine any
+
+...
+
+## Optimize
+
+```python
+
+def truncate(filename):
+    """
+    Unconditionally ensure the named file exists and is truncated.
+    """
+    open(filename, 'w').close()
+```
+
+Note: Now that we have a spec (which doesn't say anything about suppressing errors), optimize the function to follow best practices for Python, namely let exceptions bubble up and close file handles.
 
 ---
 
@@ -383,3 +454,7 @@ All together, these approaches
 - Python shines
   - functional, OO, imperative where appropriate
   - robust patterns for exception handling
+
+---
+
+# Q&A
