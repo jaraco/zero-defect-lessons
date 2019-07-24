@@ -4,41 +4,21 @@
 
 Note: Welcome to (conference, forum)... My name is Jason and I'll be talking today about engineering zero-defect software.
 
----
+...
 
-# Intro and Background
+## Intro and Background
 
 - Computer Science
 - Scheme (functional programming)
 - Zero-Defect Software
+- Passion for:
+ - reliability
+ - re-use
+ - sophistication
 
-...
-
-## Passion
-
-![Passion Fruit Image](https://saporitoovs.com/wp-content/uploads/2017/08/passionfruit.jpg)
-
-...
-
-## Passion
-
-- Reliability
-- Re-use
-- Sophistication
-
-Note: I hate repeating myself. After several decades of hacking and seeking a greater capability for programming, I've encountered lessons and accumulated patterns that work well for me.
-
-...
-
-## Introspection
-
-Note: Inspired by a tweet a few years ago, I reflected on the foundations of my technique that have led to an ability to rapidly develop robust software.
+Note: My passion is to write code that is reliable, reusable, and sophisticated. I hate repeating myself. After several decades of hacking and seeking a greater capability for programming, I've encountered lessons and accumulated patterns that work well for me. Inspired by a tweet a few years ago, I reflected on the foundations of my technique that have led to an ability to rapidly develop robust software. I distilled the inspiration into three key areas.
 
 ---
-
-# Distilled Inspiration
-
-...
 
 ## Refactoring
 
@@ -54,23 +34,15 @@ Note: Finally, there are techniques from Zero-Defect software.
 
 ...
 
-## Honorable Mentions
-
-- Object-oriented Programming
-- Test/Documentation/Behavior-Driven-Developmpent
-- Static analysis tools
-- Agile (fail fast)
-- Performance
-
-Note: Static analysis tools (linters, style checkers, IDEs) are a powerful way to avoid common mistakes before even saving a file. In this talk, I'll be focused on optimizing for correctness of design and disregarding the impact of performance. Often this tradeoff is a good one to make in practice too, as readability matters and premature optimization is a fools errand.
-...
-
-## Examples
-
-- Dredged my [first production code](https://github.com/jaraco/esdsort/commit/0e69e0f6687648cb61f50840e25c81e6f57cca61) (c. 1992).
-- C [ported to Python](https://github.com/jaraco/esdsort/commit/1e7d063ff1101d9d3b91d861f5a1a0a5efde51e3).
+## Refactoring
+## Functional Programming
+## Zero-Defect Software
 
 ---
+
+# Refactoring
+
+...
 
 ![](https://images-na.ssl-images-amazon.com/images/I/51K-M5hR8qL._SX392_BO1,204,203,200_.jpg)
 
@@ -102,15 +74,15 @@ Notes: What does "factor" mean? It's a piece of behavior, an aspect of the progr
 - Eclipse IDE
 - JetBrains/PyCharm
 - Manual
-- consider committing each stable change
+- Consider committing each stable change
 
 ...
 
 ## Refactor to
 
-- learn a new codebase
-- reshape to match conceptual needs
-- keep functions small
+- Learn a new codebase
+- Reshape to match conceptual needs
+- Keep functions small
 
 Notes: For learning a new codebase, make safe operations as you mold the codebase to your expertise (esp. if you're sole maintainer). For small functions, if it can fit on the screen, it might fit in your mind.
 
@@ -118,6 +90,7 @@ Notes: For learning a new codebase, make safe operations as you mold the codebas
 
 ## Examples
 
+TBD
 
 ---
 
@@ -127,10 +100,10 @@ Notes: For learning a new codebase, make safe operations as you mold the codebas
 
 ## What is functional programming?
 
-- not what you were taught
-- not a set of instructions
-- expressions over statements
-- all state is localized
+- Not what you were taught
+- Not a set of instructions
+- Expressions over statements
+- All state is localized
 
 ...
 
@@ -142,8 +115,8 @@ Notes: For learning a new codebase, make safe operations as you mold the codebas
 - Focus on what machines do best
   - perform an operation over a (possibly unlimited) number of inputs
 - Generalizable abstraction
-  - Simple concepts are more scalable
-  - Map/reduce forms foundation of Hadoop
+  - simple concepts are more scalable
+  - map/reduce forms foundation of Hadoop
 
 ...
 
@@ -173,10 +146,10 @@ Note: This syntax is shorter, but that's not it's key benefit. The key benefit i
 
 ## Keep Functions Simple
 
-- one output parameter
-- few input parameters (ideally one)
-- rely on exceptions for handling exceptional conditions
-- prefer single-word actions
+- One output parameter
+- Few input parameters (ideally one)
+- Rely on exceptions for handling exceptional conditions
+- Prefer single-word actions
   - `string.lower(input)` > `string.string_lowercase_input(input)`
   - `dedent(lstrip(input))` > `dedent_and_lstrip(input)`
 
@@ -186,17 +159,21 @@ Note: Here's where Python really shines - there's (preferably) one outcome from 
 
 ## Primitives
 
-- map
-- reduce
-- compose
-- partial
+- `map`
+- `reduce`
+- `compose`
+- `partial`
 
 Note: Functional paradigm brings several primitive concepts that apply to many use cases, including map, reduce, compose, and partial.
 
-## Map and Reduction
+...
 
-- map: operation on a series of inputs producing series of outputs
-- reduce: given a series of inputs, aggregate into a single output
+## Mapping and Reduction
+
+- Map
+ - operation on a series of inputs producing series of outputs
+- Reduce
+ - given a series of inputs, aggregate into a single output
 
 Note: map is perhaps the most essential computatal operation
 
@@ -325,7 +302,7 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 
 ---
 
-# Zero Defect Software
+# Zero-Defect Software
 
 ...
 
@@ -337,6 +314,8 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 - Verifiably correct code
 - Code written for verifiability
 
+...
+
 ## Cleanroom Development
 
 - Careful specification of functions, components, and control constructs
@@ -346,6 +325,8 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 - Catch many errors before compile/execution time
 - Understand the program thoroughly
 - Rigorous reviews
+
+...
 
 ## Practice
 
@@ -363,10 +344,12 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 
 Note: Often with legacy code, there is no specification. The code is the spec. Derive a spec.
 
+...
+
 ## Expectations
 
 - Slower time to initial release
-  - Faster (or comparable) development lifecycle
+  - faster (or comparable) development lifecycle
 - Low level of defects during testing
 - Few defects in production
 
@@ -376,11 +359,22 @@ Note: A high level of defects during testing indicates failure in the process. R
 
 ## Limiting State
 
-- Avoid if statements and other branching logic
-- 'if' is the new 'goto'
+- Avoid `if` statements and other branching logic
+- `if` is the new `goto`
   - avoid them; there's probably a better way
 
 Note: Limiting branching logic reduces the number of states the subprogram can be in and thus the number of combinations that need to be considered.
+
+Mention other talk.
+
+...
+
+## Code Examples
+
+- Dredged my [first production code](https://github.com/jaraco/esdsort/commit/0e69e0f6687648cb61f50840e25c81e6f57cca61) (c. 1992)
+- C [ported to Python](https://github.com/jaraco/esdsort/commit/1e7d063ff1101d9d3b91d861f5a1a0a5efde51e3)
+
+Note: fun fact - the code from this example were draw
 
 ...
 
@@ -446,15 +440,31 @@ Note: Now that we have a spec (which doesn't say anything about suppressing erro
 
 # Conclusions
 
-All together, these approaches
+Refactoring, Functional Programming, Zero-Defect Software
 
-- Reduce interactions,
-- Reducing complexity.
-- Elegance begets simplicity.
+- Reduce interactions
+- Reduce complexity
+- Elegance begets simplicity
 - Python shines
   - functional, OO, imperative where appropriate
   - robust patterns for exception handling
 
----
+Note: All together, these approaches reduce interactions, thereby reducing complexity.
+
+...
+
+## Honorable Mentions
+
+- Object-oriented Programming
+- Test/Documentation/Behavior-Driven-Development
+- Static analysis tools
+- Agile (fail fast)
+- Performance
+
+Note: Static analysis tools (linters, style checkers, IDEs) are a powerful way to avoid common mistakes before even saving a file. In this talk, I'll be focused on optimizing for correctness of design and disregarding the impact of performance. Often this tradeoff is a good one to make in practice too, as readability matters and premature optimization is a fools errand.
+
+...
 
 # Q&A
+
+## Twitter/Github: @jaraco
