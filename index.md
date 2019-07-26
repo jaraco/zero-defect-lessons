@@ -10,13 +10,15 @@ Note: Welcome to (conference, forum)... My name is Jason and I'll be talking tod
 
 - Computer Science
 - Scheme (functional programming)
-- Zero-Defect Software
+- Cleanroom development
 - Passion for:
  - reliability
  - re-use
  - sophistication
 
-Note: My passion is to write code that is reliable, reusable, and sophisticated. I hate repeating myself. After several decades of hacking and seeking a greater capability for programming, I've encountered lessons and accumulated patterns that work well for me. Inspired by a tweet a few years ago, I reflected on the foundations of my technique that have led to an ability to rapidly develop robust software. I distilled the inspiration into three key areas.
+Note:
+- A bit about me - I began early with computer programming in undergraduate studies in CS and math. My first formal programming language was Scheme, a Lisp-based functional programming language that was foundational in framing how programs are modeled. I also took a course called Zero-defect software in which we studied cleanroom development.
+- My passion is to write code that is reliable, reusable, and sophisticated. I hate repeating myself. After several decades of hacking and seeking a greater capability for programming, I've encountered lessons and accumulated patterns that work well for me. Inspired by a tweet a few years ago, I reflected on the foundations of my technique that have led to an ability to rapidly develop robust software. I distilled the inspiration into three key areas.
 
 ---
 
@@ -28,15 +30,15 @@ Note: My passion is to write code that is reliable, reusable, and sophisticated.
 
 ...
 
-## Zero-Defect Software
-
-Note: Finally, there are techniques from Zero-Defect software.
+## Cleanroom Development
 
 ...
 
 ## Refactoring
 ## Functional Programming
-## Zero-Defect Software
+## Cleanroom Development
+
+Note: These three aspects form the foundation for my approach to reliable yet sophisticated software development.
 
 ---
 
@@ -48,6 +50,8 @@ Note: Finally, there are techniques from Zero-Defect software.
 
 _The single book that most influenced my programming for the better_
 
+Note: My introduction to refactoring was through book by Martin Fowler, which describes in detail the aspects of refactoring on which I'll touch briefly today. The person who referred me to this book described it as the single book that most influenced their programming for the better, and I can echo that sentiment.
+
 ...
 
 ## Implementation as Spec
@@ -58,6 +62,8 @@ _The single book that most influenced my programming for the better_
 - Latent institutional knowledge
 - Legacy behaviors
 
+Note: Often, when approaching a piece of code, it's inherited from another author or team or company (or several) in which you have no spec and so the implementation _is_ the spec. You have to assume the implementation is correct unless proven otherwise. The code often contains latent institutional knowledge and even legacy behaviors, sometimes just enough to ship the product or not even that. Refactoring empowers you to safely restructure the code into a format that's easier to understand and test.
+
 ...
 
 ## DRY
@@ -65,16 +71,20 @@ _The single book that most influenced my programming for the better_
 - Factor the code
 - Essential functionality
 
-Notes: What does "factor" mean? It's a piece of behavior, an aspect of the program. It may be a semantic construct like a interface or a concrete one like an object or function. "Essential" - what it's intended to do and not more (constraints and limits can empower)
+Notes: What does "factor" mean? It's a piece of behavior, an aspect of the program. It may be a semantic construct like a interface or a concrete one like an object or function. "Essential" - what it's intended to do and not more (constraints and limits can empower) and without repeating yourself. Refactoring differs from basic editing in that you use proven operations, many of which can be mechanized.
 
 ...
 
-## Tools
+## Tools & Techniques
 
 - Eclipse IDE
 - JetBrains/PyCharm
 - Manual
 - Consider committing each stable change
+
+Notes:
+  There are a host of tools and IDEs that can perform mechanized refactoring operations safely. One of the first I experienced was Eclipse, which could perform many refactoring operations not just on a single file, but on a whole codebase. Java and other strongly-typed languages are more amenable to automated refactoring tools due to the constraints those languages demand. JetBrains later proved with PyCharm that similar operations could be performed on the less-strongly-typed Python language and still add immense value.
+  Of course, it's possible to manually refactor code, to apply the transforms manually, taking care to apply them independently of other changes. I recommend commiting each refactoring operation, describing the intended change and providing a checkpoint before and after the change.
 
 ...
 
@@ -88,9 +98,20 @@ Notes: For learning a new codebase, make safe operations as you mold the codebas
 
 ...
 
-## Examples
+## Code Examples
 
-TBD
+- Dredged my [first production code](https://github.com/jaraco/esdsort/commit/0e69e0f6687648cb61f50840e25c81e6f57cca61) (c. 1992)
+- C [ported to Python](https://github.com/jaraco/esdsort/commit/1e7d063ff1101d9d3b91d861f5a1a0a5efde51e3)
+
+Note: fun fact - the code from many examples in this presentation taken from the very first commercial code I produced as a high school student. I've taken the C code and translated it as directly as I could to Python 3 code to illustrate some truly legacy operations. This code is linked in this presentation, which is available online.
+
+...
+
+## Example
+
+- Consider [this extract function](https://github.com/jaraco/esdsort/commit/5825ebbf4a81a84bcd1b28cabd2a5cf76ea4ad5d) operation
+- one else block, 150 lines
+- → 1 function
 
 ---
 
@@ -120,7 +141,7 @@ TBD
 
 ...
 
-## Comprehensions
+## For / Append
 
 ```python
 items = []
@@ -128,7 +149,7 @@ for item in inputs:
     items.append(handle(item))
 ```
 
-Note: Consider this very common pattern.
+Note: Consider this very common pattern, the for/append.
 
 ...
 
@@ -140,7 +161,7 @@ Operate on expressions:
 items = [handle(item) for item in inputs]
 ```
 
-Note: This syntax is shorter, but that's not it's key benefit. The key benefit is that the syntax is mainly one expression applied to an iterable. This code communicates explicitly that there's no manipulation of inputs and exactly one operation on each item. It further reduces the temptation to inject such complicating behaviors (for the same reasons you'd avoid "goto". "handle" might be arbitrarily complex, but that complexity is encapsulated by its signature.
+Note: This syntax is shorter, but that's not it's key benefit. The key benefit is that the syntax is mainly one expression applied to an iterable. This code communicates explicitly that there's no manipulation of inputs and exactly one operation on each item. It further reduces the temptation to inject such complicating behaviors (for the same reasons you'd avoid "goto"). "handle" might be arbitrarily complex, but that complexity is encapsulated by its signature.
 
 ...
 
@@ -178,6 +199,43 @@ Note: Functional paradigm brings several primitive concepts that apply to many u
 Note: map is perhaps the most essential computatal operation
 
 ...
+
+## Char to Integer
+
+```
+def atoi(s):
+    """
+    Convert list of characters s to integer value
+    """
+    n = 0
+    i = 0
+
+    while s[i] >= '0' and s[i] <= '9':
+        n = 10*n + ord(s[i]) - ord('0')
+        i += 1
+
+    return n
+```
+
+Note: This code while simple has a demonstrates a lot of interactions between the various stages (initialization, looping, computation, index tracking). Consider instead this implementation.
+
+...
+
+## Char to Integer (functional)
+
+```
+def atoi(s):
+    """
+    Convert list of characters s to integer value
+    """
+    digits = get_digits(s)
+    ordinals = map(ord_zero, digits)
+    return functools.reduce(ten_x, ordinals, 0)
+```
+
+([full implementation](https://github.com/jaraco/esdsort/commit/221a884b5a9d04c4cb7d742bc9fd08f10fa53d9f))
+
+Note: This approach, in contrast, breaks down the conceptual steps into discrete steps, each of which can be implemented and tested independently, but which together produce the desired behavior.
 
 ## Composition
 
@@ -219,23 +277,6 @@ f1 = partial(add_n, n=1)
 
 
 Note: The last powerful primitive that I'll cover is the "partial", a way of binding state to a function.
-
-...
-
-## Partial (compared to OO)
-
-```python
-class Adder:
-    def __init__(self, addend):
-        self.addend = addend
-
-    def __call__(self, addend):
-        return addend + self.addend
-
-f1 = Adder(1)
-```
-
-Note: Functional programming tends to use less indendation and has more private state (here the 'Adder.addend' is readily inspectable).
 
 ...
 
@@ -287,7 +328,7 @@ Note: Now that we've extracted the duplicating code, we observe that filename an
 
 ...
 
-## TBD
+## Simplified
 
 ```python
 def read(stream):
@@ -302,7 +343,9 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 
 ---
 
-# Zero-Defect Software
+# Cleanroom Development
+
+Note: The key contributor to the zero-defect software approach is the cleanroom development, based on research from world-class firms including IBM.
 
 ...
 
@@ -316,7 +359,7 @@ Note: Rely on canonical interfaces wherever possible. Avoid passing parameters t
 
 ...
 
-## Cleanroom Development
+## Theory
 
 - Careful specification of functions, components, and control constructs
   - clarity
@@ -362,19 +405,9 @@ Note: A high level of defects during testing indicates failure in the process. R
 - Avoid `if` statements and other branching logic
 - `if` is the new `goto`
   - avoid them; there's probably a better way
+  - [code smell](https://www.pyohio.org/2019/presentations/74)
 
-Note: Limiting branching logic reduces the number of states the subprogram can be in and thus the number of combinations that need to be considered.
-
-Mention other talk.
-
-...
-
-## Code Examples
-
-- Dredged my [first production code](https://github.com/jaraco/esdsort/commit/0e69e0f6687648cb61f50840e25c81e6f57cca61) (c. 1992)
-- C [ported to Python](https://github.com/jaraco/esdsort/commit/1e7d063ff1101d9d3b91d861f5a1a0a5efde51e3)
-
-Note: fun fact - the code from this example were draw
+Note: Limiting branching logic reduces the number of states the subprogram can be in and thus the number of combinations that need to be considered. Later this afternoon, Aly Sivji will go into more detail on why if statements are a code smell.
 
 ...
 
@@ -419,7 +452,7 @@ def main():
     # ...
 ```
 
-Notes: In this change, I've now made explicit and apparent the purpose of that segment of code. This change also makes more explicit the specification that the output file will be truncated during startup. The code is still the spec, but it reads more like a spec. I've also extracted a variable for the output filename, an operation that probably should be done in a separate commit and affecting all hard-coded usages of that name. Now we can perform a rigorous review of this new truncate behavior. Can you imagine any
+Notes: In this change, I've now made explicit and apparent the purpose of that segment of code. This change also makes more explicit the specification that the output file will be truncated during startup. The code is still the spec, but it reads more like a spec. I've also extracted a variable for the output filename, an operation that probably should be done in a separate commit and affecting all hard-coded usages of that name. Now we can perform a rigorous review of this new truncate behavior. Can you imagine any improvements to the truncate function?
 
 ...
 
@@ -440,7 +473,7 @@ Note: Now that we have a spec (which doesn't say anything about suppressing erro
 
 # Conclusions
 
-Refactoring, Functional Programming, Zero-Defect Software
+Refactoring, Functional Programming, Cleanroom Development
 
 - Reduce interactions
 - Reduce complexity
@@ -448,6 +481,7 @@ Refactoring, Functional Programming, Zero-Defect Software
 - Python shines
   - functional, OO, imperative where appropriate
   - robust patterns for exception handling
+- Zero-Defect
 
 Note: All together, these approaches reduce interactions, thereby reducing complexity.
 
@@ -467,4 +501,6 @@ Note: Static analysis tools (linters, style checkers, IDEs) are a powerful way t
 
 # Q&A
 
-## Twitter/Github: @jaraco
+- Twitter/Github: @jaraco
+- Slides: bit.ly/zero-defect-19
+
